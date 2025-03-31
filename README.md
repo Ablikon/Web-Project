@@ -1,5 +1,6 @@
 # WareHouse API
 This project, called "Warehouse," is a comprehensive inventory management system designed to help businesses track and manage their product inventory efficiently.
+
 Project Goals
   - 1. Inventory Tracking: Monitor stock levels of products in real-time, with alerts for low inventory items.
   - 2. Product Movement Management: Track all product movements including:
