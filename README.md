@@ -17,4 +17,5 @@ Project Goals
   - 5. Reference Data Management: Maintain a catalog of reference items and categories for consistent product information.
   - 6. Menu Integration: Connect with a restaurant menu service to coordinate between food service and inventory management.
   - 7. Data Visualization: Present inventory data through intuitive dashboards and statistics.
+
 This warehouse management system aims to streamline inventory processes, reduce manual errors, prevent stockouts, and provide actionable insights through reporting and analytics features.
