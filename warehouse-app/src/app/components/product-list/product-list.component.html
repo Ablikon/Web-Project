@@ -1,0 +1,33 @@
+<div class="product-list-container">
+  <div class="header">
+    <h1>Warehouse Products</h1>
+    <div class="actions">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Search products..."
+        class="search-input">
+      <button routerLink="/products/new" class="add-button">Add New Product</button>
+    </div>
+  </div>
+
+  <div *ngIf="products.length === 0" class="no-products">
+    <p>No products available. Add some products to get started.</p>
+  </div>
+
+  <div class="products-grid">
+    <div *ngFor="let product of filteredProducts" class="product-card">
+      <h3>{{ product.name }}</h3>
+      <p class="description">{{ product.description }}</p>
+      <div class="details">
+        <span class="quantity">Quantity: {{ product.quantity }}</span>
+        <span class="price">Price: ${{ product.price }}</span>
+      </div>
+      <div class="category">Category: {{ product.category }}</div>
+      <div class="actions">
+        <button [routerLink]="['/products/edit', product.id]" class="edit">Edit</button>
+        <button (click)="deleteProduct(product.id)" class="delete">Delete</button>
+      </div>
+    </div>
+  </div>
+</div> 

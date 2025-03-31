@@ -1,0 +1,9 @@
+<nav class="navbar" *ngIf="authService.getToken()">
+  <div class="navbar-brand">{{ title }}</div>
+  <div class="navbar-menu">
+    <a routerLink="/products" routerLinkActive="active">Products</a>
+    <button (click)="logout()" class="logout-button">Logout</button>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

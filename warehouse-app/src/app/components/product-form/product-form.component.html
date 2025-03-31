@@ -1,0 +1,64 @@
+<div class="product-form-container">
+  <form (ngSubmit)="onSubmit()" class="product-form">
+    <h2>{{ isEditMode ? 'Edit Product' : 'Add New Product' }}</h2>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input 
+        type="text" 
+        id="name" 
+        [(ngModel)]="product.name" 
+        name="name" 
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea 
+        id="description" 
+        [(ngModel)]="product.description" 
+        name="description" 
+        required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">Quantity</label>
+      <input 
+        type="number" 
+        id="quantity" 
+        [(ngModel)]="product.quantity" 
+        name="quantity" 
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input 
+        type="number" 
+        id="price" 
+        [(ngModel)]="product.price" 
+        name="price" 
+        step="0.01" 
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category</label>
+      <input 
+        type="text" 
+        id="category" 
+        [(ngModel)]="product.category" 
+        name="category" 
+        required>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="submit-button">
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
+      <button type="button" class="cancel-button" routerLink="/products">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div> 
