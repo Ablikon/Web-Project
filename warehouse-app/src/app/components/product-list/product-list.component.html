@@ -18,12 +18,10 @@
   <div class="products-grid">
     <div *ngFor="let product of filteredProducts" class="product-card">
       <h3>{{ product.name }}</h3>
-      <p class="description">{{ product.description }}</p>
       <div class="details">
-        <span class="quantity">Quantity: {{ product.quantity }}</span>
-        <span class="price">Price: ${{ product.price }}</span>
+        <span class="unit">Unit: {{ product.unit }}</span>
       </div>
-      <div class="category">Category: {{ product.category }}</div>
+      <div class="category">Category: {{ getCategoryName(product.category) }}</div>
       <div class="actions">
         <button [routerLink]="['/products/edit', product.id]" class="edit">Edit</button>
         <button (click)="deleteProduct(product.id)" class="delete">Delete</button>

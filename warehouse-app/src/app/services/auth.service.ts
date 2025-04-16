@@ -4,12 +4,13 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LoginRequest, LoginResponse, User, RegisterRequest } from '../models/user.interface';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = '/api';
+  private apiUrl = environment.apiUrl;
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   private platformId = inject(PLATFORM_ID);
@@ -31,10 +32,8 @@ export class AuthService {
   }
 
   register(registerRequest: RegisterRequest): Observable<LoginResponse> {
-    console.log('Registering user:', registerRequest);
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/register`, registerRequest)
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/register/`, registerRequest)
       .pipe(map(response => {
-        console.log('Registration response:', response);
         if (this.isBrowser) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('currentUser', JSON.stringify(response.user));
@@ -45,10 +44,8 @@ export class AuthService {
   }
 
   login(loginRequest: LoginRequest): Observable<LoginResponse> {
-    console.log('Logging in user:', loginRequest.username);
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, loginRequest)
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login/`, loginRequest)
       .pipe(map(response => {
-        console.log('Login response:', response);
         if (this.isBrowser) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('currentUser', JSON.stringify(response.user));
@@ -71,5 +68,45 @@ export class AuthService {
       return localStorage.getItem('token');
     }
     return null;
+  }
+
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  hasRole(roles: string[]): boolean {
+    const currentUser = this.getCurrentUser();
+    if (currentUser && roles.includes(currentUser.role)) {
+      return true;
+    }
+    return false;
+  }
+
+  isAdmin(): boolean {
+    return this.hasRole(['admin']);
+  }
+
+  isManager(): boolean {
+    return this.hasRole(['admin', 'manager']);
+  }
+
+  isStorekeeper(): boolean {
+    return this.hasRole(['admin', 'manager', 'storekeeper']);
+  }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users/`);
+  }
+
+  getUser(id: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/users/${id}/`);
+  }
+
+  updateUser(id: number, user: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/users/${id}/`, user);
+  }
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}/`);
   }
 } 

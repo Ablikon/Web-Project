@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
-import { Product } from '../../models/product.interface';
+import { Product, Category } from '../../models/product.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, CommonModule],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss']
 })
@@ -15,11 +16,10 @@ export class ProductFormComponent implements OnInit {
   product: Product = {
     id: 0,
     name: '',
-    description: '',
-    quantity: 0,
-    price: 0,
-    category: ''
+    unit: '',
+    category: 0
   };
+  categories: Category[] = [];
   isEditMode = false;
 
   constructor(
@@ -29,6 +29,8 @@ export class ProductFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadCategories();
+    
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode = true;
@@ -36,6 +38,12 @@ export class ProductFormComponent implements OnInit {
         this.product = product;
       });
     }
+  }
+
+  loadCategories() {
+    this.productService.getCategories().subscribe(categories => {
+      this.categories = categories;
+    });
   }
 
   onSubmit() {
