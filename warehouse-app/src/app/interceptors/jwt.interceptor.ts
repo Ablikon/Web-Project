@@ -10,7 +10,7 @@ export const jwtInterceptor: HttpInterceptorFn = (request: HttpRequest<unknown>,
   if (token) {
     request = request.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Token ${token}`
       }
     });
   }

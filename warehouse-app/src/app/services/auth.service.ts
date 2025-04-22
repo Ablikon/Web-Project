@@ -1,7 +1,7 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { LoginRequest, LoginResponse, User, RegisterRequest } from '../models/user.interface';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../environments/environment';
@@ -32,27 +32,45 @@ export class AuthService {
   }
 
   register(registerRequest: RegisterRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/register/`, registerRequest)
-      .pipe(map(response => {
-        if (this.isBrowser) {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('currentUser', JSON.stringify(response.user));
-        }
-        this.currentUserSubject.next(response.user);
-        return response;
-      }));
+    return this.http.post<any>(`${this.apiUrl}/auth/register/`, registerRequest)
+      .pipe(
+        switchMap(response => {
+          return this.login({
+            username: registerRequest.username,
+            password: registerRequest.password
+          });
+        })
+      );
   }
 
   login(loginRequest: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login/`, loginRequest)
-      .pipe(map(response => {
-        if (this.isBrowser) {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('currentUser', JSON.stringify(response.user));
-        }
-        this.currentUserSubject.next(response.user);
-        return response;
-      }));
+    return this.http.post<any>(`${this.apiUrl}/login/`, loginRequest)
+      .pipe(
+        switchMap(tokenResponse => {
+          const token = tokenResponse.token;
+          
+          return this.http.get<User>(`${this.apiUrl}/users/me/`, {
+            headers: {
+              'Authorization': `Token ${token}`
+            }
+          }).pipe(
+            map(user => {
+              const response: LoginResponse = {
+                token: token,
+                user: user
+              };
+              
+              if (this.isBrowser) {
+                localStorage.setItem('token', token);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+              }
+              
+              this.currentUserSubject.next(user);
+              return response;
+            })
+          );
+        })
+      );
   }
 
   logout() {
