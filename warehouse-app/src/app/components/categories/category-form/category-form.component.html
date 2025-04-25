@@ -1,0 +1,36 @@
+<div class="category-form-container">
+  <h2 class="form-title">{{ isEditMode ? 'Edit Category' : 'Add New Category' }}</h2>
+  
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="category-form">
+    <div class="form-group">
+      <label for="name">Category Name</label>
+      <input 
+        type="text" 
+        id="name" 
+        formControlName="name" 
+        placeholder="Enter category name"
+        required>
+      <div *ngIf="categoryForm.get('name')?.invalid && (categoryForm.get('name')?.dirty || categoryForm.get('name')?.touched)" class="error-message">
+        <span *ngIf="categoryForm.get('name')?.errors?.['required']">Name is required</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea 
+        id="description" 
+        formControlName="description" 
+        placeholder="Enter category description (optional)"
+        rows="4"></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="cancel-button" routerLink="/categories">
+        Cancel
+      </button>
+      <button type="submit" class="submit-button" [disabled]="categoryForm.invalid">
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div> 

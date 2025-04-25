@@ -16,4 +16,7 @@ urlpatterns = [
     path('users/', views.UserList.as_view(), name='user-list'),
     path('users/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),
     path('users/profile/', views.UserProfile.as_view(), name='user-profile'),
+    path('users/me/', views.UserProfile.as_view(), name='current-user'),
+    path('reports/inventory/', views.inventory_report, name='inventory-report'),
+    path('reports/movements/', views.movement_report, name='movement-report'),
 ] 

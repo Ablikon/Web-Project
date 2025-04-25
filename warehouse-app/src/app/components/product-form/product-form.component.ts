@@ -18,6 +18,7 @@ export class ProductFormComponent implements OnInit {
     id: 0,
     name: '',
     unit: '',
+    description: '',
     category: 0
   };
   

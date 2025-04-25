@@ -9,6 +9,7 @@ from rest_framework.authtoken.models import Token
 from .models import *
 from .serializers import *
 from .permissions import IsAdminUser, IsStorekeeperUser
+from django.db.models import Sum, Count
 
 # Create your views here.
 
@@ -30,7 +31,7 @@ def category_list(request):
     if request.method == 'GET':
         categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
-        return Response(serializer.data)
+        return Response({'results': serializer.data})
     
     if request.method == 'POST':
         if not request.user.role == User.ADMIN:
@@ -128,13 +129,13 @@ class ProductItemList(APIView):
 
     def get(self, request):
         items = ProductItem.objects.all()
-        serializer = ProductItemModelSerializer(items, many=True)
+        serializer = ProductItemSerializer(items, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         if not request.user.role == User.ADMIN:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        serializer = ProductItemModelSerializer(data=request.data)
+        serializer = ProductItemSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -153,7 +154,7 @@ class ProductItemDetail(APIView):
         item = self.get_object(pk)
         if not item:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductItemModelSerializer(item)
+        serializer = ProductItemSerializer(item)
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -162,7 +163,7 @@ class ProductItemDetail(APIView):
         item = self.get_object(pk)
         if not item:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductItemModelSerializer(item, data=request.data)
+        serializer = ProductItemSerializer(item, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -183,13 +184,13 @@ class ProductMovementList(APIView):
 
     def get(self, request):
         movements = ProductMovement.objects.all()
-        serializer = ProductMovementModelSerializer(movements, many=True)
+        serializer = ProductMovementSerializer(movements, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         if not request.user.role == User.ADMIN:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        serializer = ProductMovementModelSerializer(data=request.data)
+        serializer = ProductMovementSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(created_by=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -208,7 +209,7 @@ class ProductMovementDetail(APIView):
         movement = self.get_object(pk)
         if not movement:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductMovementModelSerializer(movement)
+        serializer = ProductMovementSerializer(movement)
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -217,7 +218,7 @@ class ProductMovementDetail(APIView):
         movement = self.get_object(pk)
         if not movement:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductMovementModelSerializer(movement, data=request.data)
+        serializer = ProductMovementSerializer(movement, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -300,3 +301,123 @@ class UserProfile(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def inventory_report(request):
+    """
+    Generate inventory report with filters
+    """
+    filters = {}
+    
+    if 'category' in request.query_params:
+        filters['product__category'] = request.query_params.get('category')
+    
+    if 'status' in request.query_params:
+        filters['status'] = request.query_params.get('status')
+    
+    if 'location' in request.query_params:
+        filters['location__icontains'] = request.query_params.get('location')
+    
+    # Calculate inventory summary
+    items = ProductItem.objects.filter(**filters)
+    total_items = items.count()
+    total_value = items.aggregate(total=Sum('purchase_price'))['total'] or 0
+    
+    # Items by status
+    status_counts = items.values('status').annotate(count=Count('id')).order_by('status')
+    
+    # Items by category
+    category_stats = (
+        items
+        .values('product__category__name')
+        .annotate(
+            count=Count('id'),
+            value=Sum('purchase_price')
+        )
+        .order_by('product__category__name')
+    )
+    
+    categories_data = []
+    for stat in category_stats:
+        categories_data.append({
+            'category': stat['product__category__name'] or 'Uncategorized',
+            'count': stat['count'],
+            'value': stat['value'] or 0
+        })
+    
+    return Response({
+        'total_items': total_items,
+        'total_value': total_value,
+        'items_by_status': status_counts,
+        'items_by_category': categories_data
+    })
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def movement_report(request):
+    """
+    Generate movement report with filters
+    """
+    filters = {}
+    date_filters = {}
+    
+    if 'start_date' in request.query_params:
+        date_filters['date__gte'] = request.query_params.get('start_date')
+    
+    if 'end_date' in request.query_params:
+        date_filters['date__lte'] = request.query_params.get('end_date')
+    
+    if 'movement_type' in request.query_params:
+        filters['movement_type'] = request.query_params.get('movement_type')
+    
+    # Apply category filter if provided
+    category_filter = {}
+    if 'category' in request.query_params:
+        category_id = request.query_params.get('category')
+        category_filter['product_item__product__category'] = category_id
+    
+    # Combine all filters
+    combined_filters = {**filters, **date_filters, **category_filter}
+    
+    # Get movements
+    movements = ProductMovement.objects.filter(**combined_filters)
+    
+    # Movements by type
+    type_counts = movements.values('movement_type').annotate(count=Count('id')).order_by('movement_type')
+    
+    # Movements by date
+    date_counts = (
+        movements
+        .values('date')
+        .annotate(count=Count('id'))
+        .order_by('-date')
+    )
+    
+    # Movements by location
+    location_stats = []
+    
+    # Get all locations
+    locations = set()
+    for movement in movements:
+        if movement.location_from:
+            locations.add(movement.location_from)
+        if movement.location_to:
+            locations.add(movement.location_to)
+    
+    # Calculate incoming and outgoing for each location
+    for location in locations:
+        incoming = movements.filter(location_to=location).count()
+        outgoing = movements.filter(location_from=location).count()
+        
+        location_stats.append({
+            'location': location,
+            'incoming': incoming,
+            'outgoing': outgoing
+        })
+    
+    return Response({
+        'movements_by_type': type_counts,
+        'movements_by_date': date_counts,
+        'movements_by_location': location_stats
+    })

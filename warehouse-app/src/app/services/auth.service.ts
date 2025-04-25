@@ -45,41 +45,36 @@ export class AuthService {
     );
   }
 
-  login(loginRequest: LoginRequest): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login/`, loginRequest).pipe(
-      catchError((error: HttpErrorResponse) => {
-        console.error('Login error:', error);
-        return throwError(() => error);
-      }),
-      tap(response => {
-        if (this.isBrowser && response.token) {
-          localStorage.setItem('token', response.token);
-        }
-      }),
-      // Try to get user profile after login
-      switchMap(() => this.getUserProfile().pipe(
-        catchError(error => {
-          console.error('Error getting user profile:', error);
-          // If we can't get the user profile, still consider login successful
-          // but return a default user object
-          const defaultUser: User = {
-            id: 0,
-            username: loginRequest.username,
-            email: '',
-            first_name: '',
-            last_name: '',
-            role: 'storekeeper'
-          };
+  login(loginRequest: LoginRequest): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login/`, loginRequest)
+      .pipe(
+        switchMap(tokenResponse => {
+          // Django returns { token: 'your-token' }
+          const token = tokenResponse.token;
           
-          if (this.isBrowser) {
-            localStorage.setItem('currentUser', JSON.stringify(defaultUser));
-          }
-          this.currentUserSubject.next(defaultUser);
-          
-          return of({ token: this.getToken() || '' });
+          // Now get the user info using the token
+          return this.http.get<User>(`${this.apiUrl}/users/profile/`, {
+            headers: {
+              'Authorization': `Token ${token}`
+            }
+          }).pipe(
+            map(user => {
+              const response: LoginResponse = {
+                token: token,
+                user: user
+              };
+              
+              if (this.isBrowser) {
+                localStorage.setItem('token', token);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+              }
+              
+              this.currentUserSubject.next(user);
+              return response;
+            })
+          );
         })
-      ))
-    );
+      );
   }
 
   getUserProfile(): Observable<any> {

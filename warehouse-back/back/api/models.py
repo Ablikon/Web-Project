@@ -17,17 +17,19 @@ class User(AbstractUser):
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=300, null=True, blank=True)
     
     def __str__(self):
-        return self.name
+        return f"{self.name} {self.description}"
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    unit = models.CharField(max_length=50)  # e.g., kg, g, pieces
+    unit = models.CharField(max_length=50) # e.g., kg, g, pieces
+    description = models.CharField(max_length=300, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     
     def __str__(self):
-        return f"{self.name} ({self.unit})"
+        return f"{self.name} ({self.unit}) {self.description or ''}"
 
 class ProductItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='items')

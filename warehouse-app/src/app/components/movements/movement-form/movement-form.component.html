@@ -1,0 +1,97 @@
+<div class="movement-form-container">
+  <h2 class="form-title">{{ isEditMode ? 'Edit Movement' : 'Add New Movement' }}</h2>
+  
+  <div *ngIf="isLoading" class="loading-indicator">
+    Loading data, please wait...
+  </div>
+  
+  <form *ngIf="!isLoading" [formGroup]="movementForm" (ngSubmit)="onSubmit()" class="movement-form">
+    <div class="form-group">
+      <label for="product">Product</label>
+      <select 
+        id="product" 
+        class="form-control"
+        formControlName="product"
+        [class.invalid]="movementForm.get('product')?.invalid && movementForm.get('product')?.touched">
+        <option [ngValue]="null">Select a product</option>
+        <option *ngFor="let product of products" [ngValue]="product.id">
+          {{ product.name }}
+        </option>
+      </select>
+      <div *ngIf="movementForm.get('product')?.invalid && movementForm.get('product')?.touched" class="error-message">
+        Please select a product
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="productItem">Product Item</label>
+      <select 
+        id="productItem" 
+        class="form-control"
+        formControlName="productItem"
+        [class.invalid]="movementForm.get('productItem')?.invalid && movementForm.get('productItem')?.touched">
+        <option [ngValue]="null">Select a product item</option>
+        <option *ngFor="let item of filteredProductItems" [ngValue]="item.id">
+          {{ item.id }} (Quantity: {{ item.quantity }})
+        </option>
+      </select>
+      <div *ngIf="movementForm.get('productItem')?.invalid && movementForm.get('productItem')?.touched" class="error-message">
+        Please select a product item
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="movementType">Movement Type</label>
+      <select 
+        id="movementType" 
+        class="form-control"
+        formControlName="movementType"
+        [class.invalid]="movementForm.get('movementType')?.invalid && movementForm.get('movementType')?.touched">
+        <option *ngFor="let type of movementTypes" [value]="type.value">
+          {{ type.label }}
+        </option>
+      </select>
+      <div *ngIf="movementForm.get('movementType')?.invalid && movementForm.get('movementType')?.touched" class="error-message">
+        Please select movement type
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">Quantity</label>
+      <input 
+        type="number" 
+        id="quantity" 
+        class="form-control"
+        formControlName="quantity"
+        min="1"
+        [class.invalid]="movementForm.get('quantity')?.invalid && movementForm.get('quantity')?.touched">
+      <div *ngIf="movementForm.get('quantity')?.invalid && movementForm.get('quantity')?.touched" class="error-message">
+        Quantity must be at least 1
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input 
+        type="number" 
+        id="price" 
+        class="form-control"
+        formControlName="price"
+        step="0.01"
+        min="0"
+        [class.invalid]="movementForm.get('price')?.invalid && movementForm.get('price')?.touched">
+      <div *ngIf="movementForm.get('price')?.invalid && movementForm.get('price')?.touched" class="error-message">
+        Price must be a positive number
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">
+        Cancel
+      </button>
+      <button type="submit" class="btn-submit" [disabled]="movementForm.invalid">
+        {{ isEditMode ? 'Update' : 'Save' }} Movement
+      </button>
+    </div>
+  </form>
+</div> 

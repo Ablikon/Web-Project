@@ -1,0 +1,39 @@
+<div class="form-container">
+  <h2 class="form-title">{{ isEditMode ? 'Edit Inventory Item' : 'Add New Inventory Item' }}</h2>
+  
+  <form (ngSubmit)="onSubmit()" class="inventory-form">
+    <div class="form-group">
+      <label for="product">Product</label>
+      <select 
+        id="product" 
+        name="product"
+        [(ngModel)]="inventoryItem.product"
+        required>
+        <option *ngFor="let product of products" [value]="product.id">
+          {{ product.name }} ({{ product.unit }})
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">Quantity</label>
+      <input 
+        type="number" 
+        id="quantity" 
+        name="quantity"
+        [(ngModel)]="inventoryItem.quantity"
+        min="0.01"
+        step="0.01"
+        required>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="cancel-button" routerLink="/inventory">
+        Cancel
+      </button>
+      <button type="submit" class="submit-button">
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div> 
