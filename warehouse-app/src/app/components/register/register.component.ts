@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, NgIf, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
@@ -16,7 +16,9 @@ export class RegisterComponent {
     username: '',
     email: '',
     password: '',
-    passwordConfirm: ''
+    first_name: '',
+    last_name: '',
+    role: 'storekeeper' as 'admin' | 'storekeeper'
   };
   error = '';
 
@@ -26,21 +28,31 @@ export class RegisterComponent {
   ) {}
 
   onSubmit() {
-    if (this.registerData.password !== this.registerData.passwordConfirm) {
-      this.error = 'Passwords do not match';
+    // Basic validation
+    if (!this.registerData.username || !this.registerData.email || !this.registerData.password) {
+      this.error = 'Please fill in all required fields';
       return;
     }
 
-    this.authService.register({
-      username: this.registerData.username,
-      email: this.registerData.email,
-      password: this.registerData.password
-    }).subscribe({
+    this.authService.register(this.registerData).subscribe({
       next: () => {
+        // Registration successful, the auth service will handle login after registration
         this.router.navigate(['/products']);
       },
       error: (err) => {
-        this.error = 'Registration failed. Please try again.';
+        console.error('Registration error:', err);
+        
+        if (err.error && typeof err.error === 'object') {
+          // Extract the first error message from the response
+          const firstError = Object.values(err.error)[0];
+          if (Array.isArray(firstError) && firstError.length > 0) {
+            this.error = firstError[0];
+          } else {
+            this.error = 'Registration failed. Please try again.';
+          }
+        } else {
+          this.error = 'Registration failed. Please try again.';
+        }
       }
     });
   }

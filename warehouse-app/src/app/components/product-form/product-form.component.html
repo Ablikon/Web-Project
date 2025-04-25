@@ -1,63 +1,48 @@
 <div class="product-form-container">
+  <h2 class="form-title">{{ isEditMode ? 'Edit Product' : 'Add New Product' }}</h2>
+  
   <form (ngSubmit)="onSubmit()" class="product-form">
-    <h2>{{ isEditMode ? 'Edit Product' : 'Add New Product' }}</h2>
-
     <div class="form-group">
-      <label for="name">Name</label>
+      <label for="name">Product Name</label>
       <input 
         type="text" 
         id="name" 
         [(ngModel)]="product.name" 
         name="name" 
+        placeholder="Enter product name"
         required>
     </div>
 
     <div class="form-group">
-      <label for="description">Description</label>
-      <textarea 
-        id="description" 
-        [(ngModel)]="product.description" 
-        name="description" 
-        required></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="quantity">Quantity</label>
+      <label for="unit">Unit of Measurement</label>
       <input 
-        type="number" 
-        id="quantity" 
-        [(ngModel)]="product.quantity" 
-        name="quantity" 
-        required>
-    </div>
-
-    <div class="form-group">
-      <label for="price">Price</label>
-      <input 
-        type="number" 
-        id="price" 
-        [(ngModel)]="product.price" 
-        name="price" 
-        step="0.01" 
+        type="text" 
+        id="unit" 
+        [(ngModel)]="product.unit" 
+        name="unit" 
+        placeholder="E.g., kg, pieces, liters"
         required>
     </div>
 
     <div class="form-group">
       <label for="category">Category</label>
-      <input 
-        type="text" 
+      <select 
         id="category" 
         [(ngModel)]="product.category" 
         name="category" 
         required>
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="submit-button">
-        {{ isEditMode ? 'Update' : 'Create' }}
-      </button>
       <button type="button" class="cancel-button" routerLink="/products">
         Cancel
+      </button>
+      <button type="submit" class="submit-button">
+        {{ isEditMode ? 'Update' : 'Create' }}
       </button>
     </div>
   </form>

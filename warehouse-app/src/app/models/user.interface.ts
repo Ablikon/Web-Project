@@ -2,7 +2,9 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  role: string;
+  first_name: string;
+  last_name: string;
+  role: 'admin' | 'storekeeper';
 }
 
 export interface LoginRequest {
@@ -10,13 +12,16 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface LoginResponse {
+  token: string;
+  user?: User;
+}
+
 export interface RegisterRequest {
   username: string;
   email: string;
   password: string;
-}
-
-export interface LoginResponse {
-  token: string;
-  user: User;
+  first_name?: string;
+  last_name?: string;
+  role?: 'admin' | 'storekeeper';
 } 

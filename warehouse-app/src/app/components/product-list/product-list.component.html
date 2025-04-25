@@ -1,32 +1,137 @@
-<div class="product-list-container">
-  <div class="header">
-    <h1>Warehouse Products</h1>
-    <div class="actions">
-      <input 
-        type="text" 
-        [(ngModel)]="searchTerm" 
-        placeholder="Search products..."
-        class="search-input">
-      <button routerLink="/products/new" class="add-button">Add New Product</button>
+<div class="warehouse-dashboard">
+  <div class="sidebar">
+    <div class="logo">
+      <i class="fas fa-warehouse"></i>
+      <h2>WareHouse</h2>
     </div>
+    <nav class="nav-menu">
+      <a class="nav-item active">
+        <i class="fas fa-box"></i>
+        <span>Products</span>
+      </a>
+      <a class="nav-item">
+        <i class="fas fa-layer-group"></i>
+        <span>Categories</span>
+      </a>
+      <a class="nav-item">
+        <i class="fas fa-dolly"></i>
+        <span>Inventory</span>
+      </a>
+      <a class="nav-item">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Movements</span>
+      </a>
+      <a class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Reports</span>
+      </a>
+      <a class="nav-item logout" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </nav>
   </div>
 
-  <div *ngIf="products.length === 0" class="no-products">
-    <p>No products available. Add some products to get started.</p>
-  </div>
-
-  <div class="products-grid">
-    <div *ngFor="let product of filteredProducts" class="product-card">
-      <h3>{{ product.name }}</h3>
-      <p class="description">{{ product.description }}</p>
-      <div class="details">
-        <span class="quantity">Quantity: {{ product.quantity }}</span>
-        <span class="price">Price: ${{ product.price }}</span>
+  <div class="main-content">
+    <div class="header">
+      <div class="page-title">
+        <h1>Inventory Management</h1>
+        <p>Manage your warehouse products efficiently</p>
       </div>
-      <div class="category">Category: {{ product.category }}</div>
-      <div class="actions">
-        <button [routerLink]="['/products/edit', product.id]" class="edit">Edit</button>
-        <button (click)="deleteProduct(product.id)" class="delete">Delete</button>
+      <div class="header-actions">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm" 
+            placeholder="Search products..."
+            class="search-input">
+        </div>
+        <button routerLink="/products/new" class="btn-add">
+          <i class="fas fa-plus"></i> Add New Product
+        </button>
+      </div>
+    </div>
+
+    <div class="stats-panel">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-boxes"></i>
+        </div>
+        <div class="stat-details">
+          <h3>{{products.length}}</h3>
+          <p>Total Products</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-tags"></i>
+        </div>
+        <div class="stat-details">
+          <h3>{{categories.length}}</h3>
+          <p>Categories</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-dolly-flatbed"></i>
+        </div>
+        <div class="stat-details">
+          <h3>{{totalStock}}</h3>
+          <p>Items in Stock</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <div class="stat-details">
+          <h3>{{movementsCount}}</h3>
+          <p>Recent Movements</p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="products.length === 0" class="no-data">
+      <div class="empty-state">
+        <i class="fas fa-box-open"></i>
+        <h3>No products available</h3>
+        <p>Add some products to get started with your inventory management</p>
+        <button routerLink="/products/new" class="btn-add-big">
+          <i class="fas fa-plus"></i> Add First Product
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="products.length > 0" class="products-table">
+      <div class="table-header">
+        <div class="col-name">Product Name</div>
+        <div class="col-category">Category</div>
+        <div class="col-unit">Unit</div>
+        <div class="col-quantity">Stock</div>
+        <div class="col-actions">Actions</div>
+      </div>
+      
+      <div *ngFor="let product of filteredProducts" class="table-row">
+        <div class="col-name">{{ product.name }}</div>
+        <div class="col-category">{{ getCategory(product.category) }}</div>
+        <div class="col-unit">{{ product.unit }}</div>
+        <div class="col-quantity">
+          <span [ngClass]="getStockClass(getProductStock(product.id))">
+            {{ getProductStock(product.id) }}
+          </span>
+        </div>
+        <div class="col-actions">
+          <button class="btn-icon" title="View Details">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button class="btn-icon" [routerLink]="['/products/edit', product.id]" title="Edit Product">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn-icon btn-danger" (click)="deleteProduct(product.id)" title="Delete Product">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>

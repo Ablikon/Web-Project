@@ -3,6 +3,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from . import views
 
 urlpatterns = [
+    path('register/', views.RegisterView.as_view(), name='register'),
     path('login/', obtain_auth_token, name='api_token_auth'),
     path('categories/', views.category_list, name='category-list'),
     path('categories/<int:pk>/', views.category_detail, name='category-detail'),
@@ -14,4 +15,5 @@ urlpatterns = [
     path('product-movements/<int:pk>/', views.ProductMovementDetail.as_view(), name='product-movement-detail'),
     path('users/', views.UserList.as_view(), name='user-list'),
     path('users/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),
+    path('users/profile/', views.UserProfile.as_view(), name='user-profile'),
 ] 

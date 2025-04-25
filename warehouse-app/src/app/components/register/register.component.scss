@@ -1,70 +1,161 @@
 .register-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #192a56;
+  background-image: url('/assets/images/warehouse-bg.svg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(25, 42, 86, 0.7);
+    z-index: 1;
+  }
+}
 
-  .register-form {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 400px;
+.register-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 1.5rem;
+  z-index: 2;
+  
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+}
 
-    h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+.register-form {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  
+  h2 {
+    margin-bottom: 1.5rem;
+    color: #192a56;
+    font-weight: 600;
+    text-align: center;
+  }
+}
 
-    .form-group {
-      margin-bottom: 1rem;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
 
-      label {
-        display: block;
-        margin-bottom: 0.5rem;
-      }
+.form-group {
+  margin-bottom: 1.2rem;
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+  }
+}
 
-      input {
-        width: 100%;
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
-    }
+.input-with-icon {
+  position: relative;
+  
+  i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+  }
+  
+  input, select {
+    padding-left: 38px;
+  }
+}
 
-    .error {
-      color: red;
-      margin-bottom: 1rem;
-    }
+input, select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  
+  &:focus {
+    outline: none;
+    border-color: #4a69bd;
+    box-shadow: 0 0 0 3px rgba(74, 105, 189, 0.1);
+  }
+}
 
-    button {
-      width: 100%;
-      padding: 0.75rem;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-bottom: 1rem;
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='292.4' height='292.4'%3E%3Cpath fill='%23333' d='M287 69.4a17.6 17.6 0 0 0-13-5.4H18.4c-5 0-9.3 1.8-12.9 5.4A17.6 17.6 0 0 0 0 82.2c0 5 1.8 9.3 5.4 12.9l128 127.9c3.6 3.6 7.8 5.4 12.8 5.4s9.2-1.8 12.8-5.4L287 95c3.5-3.5 5.4-7.8 5.4-12.8 0-5-1.9-9.2-5.5-12.8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px;
+}
 
-      &:hover {
-        background-color: #218838;
-      }
-    }
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background-color: #192a56;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin: 1rem 0;
+  
+  &:hover {
+    background-color: #1e3799;
+  }
+}
 
-    .login-link {
-      text-align: center;
-      
-      a {
-        color: #007bff;
-        text-decoration: none;
-        
-        &:hover {
-          text-decoration: underline;
-        }
-      }
+.error {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  
+  a {
+    color: #3498db;
+    font-weight: 600;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
     }
   }
 } 
