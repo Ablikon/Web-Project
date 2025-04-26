@@ -40,7 +40,13 @@ export class ProductFormComponent implements OnInit {
     if (id) {
       this.isEditMode = true;
       this.productService.getProduct(+id).subscribe(product => {
-        this.product = product;
+        this.product = {
+          ...product,
+          // Ensure category is always a number
+          category: typeof product.category === 'number' ? 
+            product.category : 
+            product.category.id
+        };
       });
     }
   }
@@ -66,13 +72,34 @@ export class ProductFormComponent implements OnInit {
       return;
     }
     
+    // Prepare the product data for submission
+    const productData = {
+      ...this.product,
+      // Ensure category is sent as a number
+      category: typeof this.product.category === 'number' ? 
+        this.product.category : 
+        (this.product.category as Category).id
+    };
+    
     if (this.isEditMode) {
-      this.productService.updateProduct(this.product.id, this.product).subscribe(() => {
-        this.router.navigate(['/products']);
+      this.productService.updateProduct(this.product.id, productData).subscribe({
+        next: () => {
+          this.router.navigate(['/products']);
+        },
+        error: (error) => {
+          console.error('Error updating product:', error);
+          // Handle error appropriately
+        }
       });
     } else {
-      this.productService.createProduct(this.product).subscribe(() => {
-        this.router.navigate(['/products']);
+      this.productService.createProduct(productData).subscribe({
+        next: () => {
+          this.router.navigate(['/products']);
+        },
+        error: (error) => {
+          console.error('Error creating product:', error);
+          // Handle error appropriately
+        }
       });
     }
   }
