@@ -18,17 +18,17 @@ class CategorySerializer(serializers.Serializer):
     def create(self, validated_data):
         return Category.objects.create(**validated_data)
 
-class ProductModelSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'unit', 'category']
 
-class ProductItemModelSerializer(serializers.ModelSerializer):
+class ProductItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductItem
         fields = ['id', 'product', 'quantity']
 
-class ProductMovementModelSerializer(serializers.ModelSerializer):
+class ProductMovementSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductMovement
         fields = ['id', 'movement_type', 'product_item', 'previous_quantity', 

@@ -1,0 +1,58 @@
+<app-warehouse-layout>
+  <div class="content-container">
+    <div class="form-navigation">
+      <a routerLink="/categories" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Categories
+      </a>
+    </div>
+    
+    <div class="category-form">
+      <div class="form-header">
+        <div class="form-icon">
+          <i class="fas fa-tag"></i>
+        </div>
+        <h2>{{ isEditMode ? 'Edit' : 'Add New' }} Category</h2>
+        <p>Organize your inventory with clear categories</p>
+      </div>
+
+      <div *ngIf="loading" class="loading-indicator">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Loading category data...</span>
+      </div>
+      
+      <div *ngIf="error" class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
+
+      <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+        <div class="form-section">
+          <h3><i class="fas fa-info-circle"></i> Category Details</h3>
+          <div class="form-group">
+            <label for="name" class="required">Category Name</label>
+            <input 
+              type="text" 
+              id="name" 
+              class="form-control" 
+              formControlName="name" 
+              placeholder="Enter category name"
+              required>
+            <span class="form-text">Choose a descriptive name for this category</span>
+            <div *ngIf="categoryForm.get('name')?.invalid && (categoryForm.get('name')?.dirty || categoryForm.get('name')?.touched)" class="error-message">
+              <i class="fas fa-exclamation-triangle"></i> Category name is required
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-cancel" routerLink="/categories">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+          <button type="submit" [disabled]="categoryForm.invalid" class="btn btn-submit">
+            <i class="fas fa-save"></i> {{ isEditMode ? 'Update Category' : 'Create Category' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-warehouse-layout>

@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ProductMovementService {
-  private apiUrl = `${environment.apiUrl}/product-movements`;
+  private apiUrl = `${environment.apiUrl}/product-movements/`;
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class ProductMovementService {
   }
 
   getProductMovement(id: number): Observable<ProductMovement> {
-    return this.http.get<ProductMovement>(`${this.apiUrl}/${id}`);
+    return this.http.get<ProductMovement>(`${this.apiUrl}${id}`);
   }
 
   createProductMovement(movement: Omit<ProductMovement, 'id' | 'created_at' | 'created_by'>): Observable<ProductMovement> {

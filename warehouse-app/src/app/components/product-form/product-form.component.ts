@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { CategoryService } from '../../services/category.service';
 import { Product, Category } from '../../models/product.interface';
+import { WarehouseLayoutComponent } from '../../layouts/warehouse-layout/warehouse-layout.component';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [FormsModule, RouterLink, CommonModule],
+  imports: [FormsModule, RouterLink, CommonModule, WarehouseLayoutComponent],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss']
 })
@@ -54,7 +55,17 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
+  isFormValid(): boolean {
+    return !!this.product.name && 
+           !!this.product.unit && 
+           !!this.product.category;
+  }
+
   onSubmit() {
+    if (!this.isFormValid()) {
+      return;
+    }
+    
     if (this.isEditMode) {
       this.productService.updateProduct(this.product.id, this.product).subscribe(() => {
         this.router.navigate(['/products']);

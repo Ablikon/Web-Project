@@ -1,0 +1,41 @@
+<div class="warehouse-dashboard">
+  <div class="sidebar">
+    <div class="logo">
+      <i class="fas fa-warehouse"></i>
+      <h2>WareHouse</h2>
+    </div>
+    <nav class="nav-menu">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/products" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-box"></i>
+        <span>Products</span>
+      </a>
+      <a routerLink="/categories" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-layer-group"></i>
+        <span>Categories</span>
+      </a>
+      <a routerLink="/movements" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Movements</span>
+      </a>
+      <a routerLink="/reports" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Reports</span>
+      </a>
+      <a (click)="logout()" class="nav-item logout">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="main-content">
+    <ng-content></ng-content>
+  </div>
+  
+  <!-- Toast notification component -->
+  <app-toast></app-toast>
+</div>

@@ -1,0 +1,251 @@
+@import '../../styles/common.scss';
+
+.content-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-title {
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: $dark-color;
+    margin: 0 0 8px 0;
+  }
+  
+  p {
+    color: $text-muted;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.add-category-btn {
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: darken($primary-color, 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba($primary-color, 0.3);
+  }
+  
+  i {
+    font-size: 14px;
+  }
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: rgba($primary-color, 0.1);
+  color: $primary-color;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  
+  i {
+    font-size: 20px;
+  }
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba($danger-color, 0.1);
+  color: $danger-color;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  
+  i {
+    font-size: 18px;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid $border-color;
+  margin-bottom: 24px;
+  
+  i {
+    font-size: 3rem;
+    color: $grey-color;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: $dark-color;
+  }
+  
+  p {
+    color: $text-muted;
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+  }
+  
+  .btn-big {
+    padding: 12px 24px;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid $border-color;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.category-table {
+  width: 100%;
+  
+  .table-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 120px;
+    padding: 16px 20px;
+    background-color: $light-bg;
+    font-weight: 600;
+    color: $text-muted;
+    border-bottom: 1px solid $border-color;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .table-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 120px;
+    padding: 16px 20px;
+    align-items: center;
+    border-bottom: 1px solid $border-color;
+    transition: background-color 0.15s ease;
+    
+    &:hover {
+      background-color: $hover-color;
+    }
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  .col-id {
+    color: $text-muted;
+    font-size: 0.9rem;
+  }
+  
+  .col-name {
+    font-weight: 500;
+    color: $dark-color;
+  }
+  
+  .col-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $light-bg;
+  border: 1px solid $border-color;
+  color: $text-color;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: $primary-color;
+    color: white;
+    border-color: $primary-color;
+  }
+  
+  &.btn-danger {
+    color: $danger-color;
+    
+    &:hover {
+      background-color: $danger-color;
+      color: white;
+      border-color: $danger-color;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .category-table {
+    .table-header {
+      display: none;
+    }
+    
+    .table-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 16px;
+      
+      .col-id, .col-name {
+        display: flex;
+        justify-content: space-between;
+        
+        &:before {
+          content: attr(data-label);
+          font-weight: 600;
+          color: $text-muted;
+        }
+      }
+      
+      .col-actions {
+        justify-content: flex-start;
+        margin-top: 10px;
+      }
+    }
+  }
+}

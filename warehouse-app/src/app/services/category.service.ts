@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiUrl = `${environment.apiUrl}/categories`;
+  private apiUrl = `${environment.apiUrl}/categories/`;
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class CategoryService {
   }
 
   getCategory(id: number): Observable<Category> {
-    return this.http.get<Category>(`${this.apiUrl}/${id}`);
+    return this.http.get<Category>(`${this.apiUrl}${id}`);
   }
 
   createCategory(category: Omit<Category, 'id'>): Observable<Category> {
@@ -25,10 +25,10 @@ export class CategoryService {
   }
 
   updateCategory(id: number, category: Partial<Category>): Observable<Category> {
-    return this.http.put<Category>(`${this.apiUrl}/${id}`, category);
+    return this.http.put<Category>(`${this.apiUrl}${id}`, category);
   }
 
   deleteCategory(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}${id}`);
   }
 } 

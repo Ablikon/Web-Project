@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ProductItemService {
-  private apiUrl = `${environment.apiUrl}/product-items`;
+  private apiUrl = `${environment.apiUrl}/product-items/`;
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class ProductItemService {
   }
 
   getProductItem(id: number): Observable<ProductItem> {
-    return this.http.get<ProductItem>(`${this.apiUrl}/${id}`);
+    return this.http.get<ProductItem>(`${this.apiUrl}${id}`);
   }
 
   createProductItem(productItem: Omit<ProductItem, 'id'>): Observable<ProductItem> {
@@ -25,10 +25,10 @@ export class ProductItemService {
   }
 
   updateProductItem(id: number, productItem: Partial<ProductItem>): Observable<ProductItem> {
-    return this.http.put<ProductItem>(`${this.apiUrl}/${id}`, productItem);
+    return this.http.put<ProductItem>(`${this.apiUrl}${id}`, productItem);
   }
 
   deleteProductItem(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}${id}`);
   }
 } 

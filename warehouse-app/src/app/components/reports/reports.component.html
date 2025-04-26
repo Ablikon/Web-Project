@@ -1,0 +1,52 @@
+<app-warehouse-layout>
+  <div class="container">
+    <h2>Reports</h2>
+
+    <div *ngIf="loading" class="loading">Loading...</div>
+    
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="!loading && products.length === 0" class="empty-state">
+      No products found for reporting.
+    </div>
+
+    <div *ngIf="!loading && products.length > 0" class="reports-container">
+      
+      <!-- Overview Section -->
+      <section class="report-section">
+        <h3>Inventory Overview</h3>
+        <div class="overview-stats">
+          <div class="stat-card">
+            <span class="stat-value">{{ products.length }}</span>
+            <span class="stat-label">Total Products</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">{{ categories.length }}</span>
+            <span class="stat-label">Total Categories</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Category Reports -->
+      <section class="report-section" *ngIf="categoryReports.length > 0">
+        <h3>Category Breakdown</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Products Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let report of categoryReports">
+              <td>{{ report.category.name }}</td>
+              <td>{{ report.productCount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</app-warehouse-layout>

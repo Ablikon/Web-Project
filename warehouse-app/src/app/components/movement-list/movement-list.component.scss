@@ -1,0 +1,53 @@
+.container {
+  padding: 20px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.data-table th, .data-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.movement-in {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.movement-out {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.loading, .error-message, .empty-state {
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.loading {
+  background-color: #e9f3ff;
+  color: #0062cc;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.empty-state {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  text-align: center;
+  padding: 30px;
+}

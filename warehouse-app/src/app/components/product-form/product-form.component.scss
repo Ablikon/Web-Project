@@ -1,111 +1,167 @@
-.product-form-container {
-  max-width: 800px;
-  margin: 2rem auto;
+@import '../../styles/common.scss';
+
+.content-container {
   padding: 2rem;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.form-title {
-  text-align: center;
+// Page header styles
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
-  color: #192a56;
-  font-weight: 600;
-  font-size: 1.8rem;
-}
-
-.product-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
   
-  label {
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+  .page-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
     color: #333;
   }
   
-  input, select, textarea {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    width: 100%;
-    
-    &:focus {
-      outline: none;
-      border-color: #4a69bd;
-      box-shadow: 0 0 0 3px rgba(74, 105, 189, 0.1);
-    }
-  }
-  
-  textarea {
-    min-height: 120px;
-    resize: vertical;
-  }
-  
-  select {
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='292.4' height='292.4'%3E%3Cpath fill='%23333' d='M287 69.4a17.6 17.6 0 0 0-13-5.4H18.4c-5 0-9.3 1.8-12.9 5.4A17.6 17.6 0 0 0 0 82.2c0 5 1.8 9.3 5.4 12.9l128 127.9c3.6 3.6 7.8 5.4 12.8 5.4s9.2-1.8 12.8-5.4L287 95c3.5-3.5 5.4-7.8 5.4-12.8 0-5-1.9-9.2-5.5-12.8z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 10px;
-    cursor: pointer;
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
   }
 }
 
+// Card styles
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 0;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid $border-color;
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+// Section styles
+.section {
+  margin-bottom: 2rem;
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      
+      i {
+        color: $primary-color;
+      }
+    }
+  }
+}
+
+// Form styles
+.form-group {
+  margin-bottom: 1.5rem;
+  
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: $dark-color;
+    font-size: 0.95rem;
+  }
+  
+  .required::after {
+    content: '*';
+    color: $danger-color;
+    margin-left: 4px;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    
+    &:focus {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+      outline: none;
+    }
+    
+    &.ng-invalid.ng-touched {
+      border-color: $danger-color;
+    }
+  }
+  
+  select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 46px;
+  }
+  
+  .form-text {
+    font-size: 0.85rem;
+    color: $text-muted;
+    margin-top: 8px;
+    display: block;
+  }
+}
+
+// Button actions
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
   
-  button {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
     font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
+    border-radius: 6px;
     
-    &.submit-button {
-      background-color: #192a56;
-      color: white;
-      
-      &:hover {
-        background-color: #1e3799;
-      }
+    i {
+      font-size: 16px;
     }
     
-    &.cancel-button {
-      background-color: #f1f2f6;
-      color: #333;
-      
-      &:hover {
-        background-color: #dfe4ea;
-      }
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
   }
 }
 
-@media (max-width: 576px) {
-  .product-form-container {
-    margin: 1rem;
-    padding: 1.5rem;
+// Responsive adjustments
+@media (max-width: 992px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
   
   .form-actions {
     flex-direction: column;
     
-    button {
+    .btn {
       width: 100%;
+      justify-content: center;
+      margin-bottom: 0.5rem;
     }
   }
 } 

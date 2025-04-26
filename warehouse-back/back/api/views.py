@@ -128,13 +128,13 @@ class ProductItemList(APIView):
 
     def get(self, request):
         items = ProductItem.objects.all()
-        serializer = ProductItemModelSerializer(items, many=True)
+        serializer = ProductItemSerializer(items, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         if not request.user.role == User.ADMIN:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        serializer = ProductItemModelSerializer(data=request.data)
+        serializer = ProductItemSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -153,7 +153,7 @@ class ProductItemDetail(APIView):
         item = self.get_object(pk)
         if not item:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductItemModelSerializer(item)
+        serializer = ProductItemSerializer(item)
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -162,7 +162,7 @@ class ProductItemDetail(APIView):
         item = self.get_object(pk)
         if not item:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductItemModelSerializer(item, data=request.data)
+        serializer = ProductItemSerializer(item, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -183,13 +183,13 @@ class ProductMovementList(APIView):
 
     def get(self, request):
         movements = ProductMovement.objects.all()
-        serializer = ProductMovementModelSerializer(movements, many=True)
+        serializer = ProductMovementSerializer(movements, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         if not request.user.role == User.ADMIN:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        serializer = ProductMovementModelSerializer(data=request.data)
+        serializer = ProductMovementSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(created_by=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -208,7 +208,7 @@ class ProductMovementDetail(APIView):
         movement = self.get_object(pk)
         if not movement:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductMovementModelSerializer(movement)
+        serializer = ProductMovementSerializer(movement)
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -217,7 +217,7 @@ class ProductMovementDetail(APIView):
         movement = self.get_object(pk)
         if not movement:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductMovementModelSerializer(movement, data=request.data)
+        serializer = ProductMovementSerializer(movement, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
