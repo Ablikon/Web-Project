@@ -2,6 +2,35 @@
   padding: 20px;
 }
 
+.reports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .export-buttons {
+    display: flex;
+    gap: 12px;
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      
+      i {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
 .reports-container {
   display: flex;
   flex-direction: column;

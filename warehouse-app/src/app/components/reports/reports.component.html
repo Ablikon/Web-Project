@@ -1,6 +1,16 @@
 <app-warehouse-layout>
   <div class="container">
-    <h2>Reports</h2>
+    <div class="reports-header">
+      <h2>Reports</h2>
+      <div class="export-buttons">
+        <button class="btn btn-success" (click)="exportProductsReport()">
+          <i class="fas fa-file-excel"></i> Export Products Report
+        </button>
+        <!-- <button class="btn btn-success" (click)="exportInventoryReport()">
+          <i class="fas fa-file-excel"></i> Export Inventory Report
+        </button> -->
+      </div>
+    </div>
 
     <div *ngIf="loading" class="loading">Loading...</div>
     

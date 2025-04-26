@@ -5,6 +5,7 @@ import { CategoryService } from '../../services/category.service';
 import { Product, Category } from '../../models/product.interface';
 import { ProductCategoryPipe } from '../../pipes/product-category.pipe';
 import { WarehouseLayoutComponent } from '../../layouts/warehouse-layout/warehouse-layout.component';
+import { ReportsService } from '../../services/reports.service';
 
 interface CategoryReport {
   category: Category;
@@ -27,7 +28,8 @@ export class ReportsComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private reportsService: ReportsService
   ) { }
 
   ngOnInit(): void {
@@ -76,5 +78,21 @@ export class ReportsComponent implements OnInit {
         productCount: categoryProducts.length
       };
     });
+  }
+
+  exportProductsReport(): void {
+    try {
+      this.reportsService.generateProductReport();
+    } catch (error) {
+      this.error = 'Failed to generate products report';
+    }
+  }
+
+  exportInventoryReport(): void {
+    try {
+      this.reportsService.generateInventoryReport();
+    } catch (error) {
+      this.error = 'Failed to generate inventory report';
+    }
   }
 }
